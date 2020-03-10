@@ -3,11 +3,14 @@ import Square from "./Square";
 
 export default function Board() {
   const [squares, setSquares] = React.useState(Array(9).fill(null));
-  const status = "Next player: X";
+  const [xIsNext, setxIsNext] = React.useState(true);
+  const player = xIsNext ? "X" : "O";
+  const status = `Next player: ${player}`;
 
   function handleClick(squareIndex) {
     const squaresCopy = squares.slice();
-    squaresCopy[squareIndex] = "X";
+    squaresCopy[squareIndex] = player;
+    setxIsNext(!xIsNext);
     setSquares(squaresCopy);
   }
 
