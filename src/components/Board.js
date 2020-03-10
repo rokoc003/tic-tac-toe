@@ -1,15 +1,47 @@
 import React from "react";
 import Square from "./Square";
 
+function calculateWinner(squares) {
+  const lines = [
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+    const [firstIndex, secondIndex, thirdIndex] = lines[lineIndex];
+    const firstSquare = squares[firstIndex];
+    const secondSquare = squares[secondIndex];
+    const thirdSquare = squares[thirdIndex];
+
+    if (
+      firstSquare === secondSquare &&
+      secondSquare === thirdSquare &&
+      firstSquare !== null
+    ) {
+      return firstSquare;
+    }
+  }
+  return null;
+}
+
 export default function Board() {
   const [squares, setSquares] = React.useState(Array(9).fill(null));
   const [xIsNext, setxIsNext] = React.useState(true);
-  const player = xIsNext ? "X" : "O";
-  const status = `Next player: ${player}`;
+  const nextPlayer = xIsNext ? "X" : "O";
+  const winner = calculateWinner(squares);
+  const status = winner ? `Winner is ${winner}` : `Next player: ${nextPlayer}`;
 
   function handleClick(squareIndex) {
+    if (squares[squareIndex] || winner) {
+      return;
+    }
     const squaresCopy = squares.slice();
-    squaresCopy[squareIndex] = player;
+    squaresCopy[squareIndex] = nextPlayer;
     setxIsNext(!xIsNext);
     setSquares(squaresCopy);
   }
